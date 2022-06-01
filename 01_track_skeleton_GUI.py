@@ -28,7 +28,7 @@ class Track:
                                    
                                    
                                    """,
-                                   font="Arial 21 italic", wrap=350,
+                                   font="Arial 21 italic", width=29,
                                    justify=LEFT, bg="#E9967A",
                                    borderwidth=2, relief="solid",
                                    padx=10, pady=10)
