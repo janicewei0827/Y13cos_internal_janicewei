@@ -41,7 +41,7 @@ class Track:
 
     def view(self,job_numbers, names, charges):
         print("You asked for viewing your jobs.")
-        get_help = View(self,job_numbers, names, charges)
+        get_info = View(self,job_numbers, names, charges)
 
 
 class View:
