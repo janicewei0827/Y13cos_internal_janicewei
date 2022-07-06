@@ -38,3 +38,5 @@ print("charge3: $", charge3)
 job_charge=charge1+charge2+charge3
 #for testing purpose
 print("Job charge: $",job_charge)
+print("Rounded Job Charge: ${:.2f}".format(job_charge))
+
