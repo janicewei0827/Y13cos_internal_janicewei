@@ -1,16 +1,23 @@
 from tkinter import *
 import tkinter as tk
 from functools import partial  #to prevent unwanted windows
-import random
 import math
 
 class Track:
     def __init__(self, parent):
+        """
+        this method is used for containing all required elements in the GUI (including frames, heading, logo, texts, entry boxes,
+        buttons, check buttons, etc). Some elements in this method can call other methods/classes in the program, relating the
+        components in this program together.
+
+        Arguments: None
+        Returns: int, int, list, list, list
+        """
         background_color = "#a81c07"
 
-        self.job_numbers=[]
-        self.names=[]
-        self.charges=[]
+        self.job_numbers = []
+        self.names = []
+        self.charges = []
 
         self.track_frame = Frame(padx=10, pady=10,
                                  bg=background_color)
@@ -33,16 +40,16 @@ class Track:
         self.heading_label = Label(self.input_boxes_frame,
                                    text="Enter the information of your jobs...",
                                    bg=background_color1,
-                                   font="Arial 21 italic bold",width=29,
+                                   font="Arial 21 italic bold", width=29,
                                    padx=10, pady=10)
         self.heading_label.grid(row=0, columnspan=2)
 
-        disabled_color="#999999"
-        text_color="#303030"
+        disabled_color = "#999999"
+        text_color = "#303030"
         #job number (row 1)
         self.job_num_label = Label(self.input_boxes_frame, text="Job Number",
-                                   font="Arial 16", bg=background_color1, fg=text_color
-                                   , wrap=160, justify=LEFT)
+                                   font="Arial 16", bg=background_color1, fg=text_color,
+                                   wrap=160, justify=LEFT)
         self.job_num_label.grid(row=1, column=0, sticky='w', padx=20)
         self.job_num_entry = Entry(self.input_boxes_frame, width=15,
                                    font="Arial 13 bold")
@@ -153,8 +160,16 @@ class Track:
             self.view_button.config(state=DISABLED)
 
     def check_service(self):
-        disabled_color="#999999"
-        text_color="#303030"
+        """
+        Check the user's selection on service types to give her a normal/disabled minutes spent entry
+        box. If virus protection is selected, the entry box & text colour are normal. Otherwise, the
+        entry box will be disabled, texts & bg of entry box will be grey.
+
+        Arguments: None
+        Returns: None
+        """
+        disabled_color = "#999999"
+        text_color = "#303030"
         if self.var0.get() == 1:
             self.mins_spent_entry.configure(state=NORMAL)
             self.mins_spent_label.configure(fg=text_color)
@@ -163,6 +178,13 @@ class Track:
             self.mins_spent_label.configure(fg=disabled_color)
 
     def input_checker(self):
+        """
+        Check ths users' input in entry boxes and the selection on check boxes. Error messages will be shown if there
+        are errors in the user's inputs or neither of the service is selected.
+
+        Arguments: None
+        Returns: float, int, int, int
+        """
         job_number = self.job_num_entry.get()
         customer_name = self.customer_name_entry.get()
         distance_travelled = self.distance_travelled_entry.get()
@@ -173,14 +195,14 @@ class Track:
         #check job number
         try:
             job_number = int(job_number)
-            if 0<=job_number:
-                has_error1="no"
+            if 0 <= job_number:
+                has_error1 = "no"
             else:
-                answer="Please enter a valid number!"
-                has_error1="yes"
+                answer = "Please enter a valid number!"
+                has_error1 = "yes"
         except ValueError:
-            answer="Please enter a valid number!"
-            has_error1="yes"
+            answer = "Please enter a valid number!"
+            has_error1 = "yes"
             #display error message
         if has_error1 == "yes":
             self.job_num_entry.configure(bg=error)
@@ -190,11 +212,11 @@ class Track:
             self.job_num_error_label.configure(text="")
 
         #check customer name
-        if len(customer_name)==0 or customer_name.isspace():
-            has_error2="yes"
-            answer="Please enter a valid name!"
+        if len(customer_name) == 0 or customer_name.isspace():
+            has_error2 = "yes"
+            answer = "Please enter a valid name!"
         else:
-            has_error2="no"
+            has_error2 = "no"
             #display error messages
         if has_error2 == "yes":
             self.customer_name_entry.configure(bg=error)
@@ -205,18 +227,18 @@ class Track:
 
         #check distance travelled
         try:
-            distance_travelled=float(distance_travelled)
-            if 0<=distance_travelled<=800:
-                has_error3="no"
+            distance_travelled = float(distance_travelled)
+            if 0 <= distance_travelled <= 800:
+                has_error3 = "no"
             elif distance_travelled<0:
-                answer="Please enter a valid number for distance!"
-                has_error3="yes"
+                answer = "Please enter a valid number for distance!"
+                has_error3 = "yes"
             else:
-                answer="Too far away! That seems impossible!"
-                has_error3="yes"
+                answer = "Too far away! That seems impossible!"
+                has_error3 = "yes"
         except ValueError:
-            has_error3="yes"
-            answer="Please enter a valid number for distance!"
+            has_error3 = "yes"
+            answer = "Please enter a valid number for distance!"
             #display error messages
         if has_error3 == "yes":
             self.distance_travelled_entry.configure(bg=error)
@@ -228,9 +250,9 @@ class Track:
         #check service type
         if self.var0.get() == 0 and self.var1.get() == 0:
             answer="You must select one of the services!"
-            has_error4="yes"
+            has_error4 = "yes"
         else:
-            has_error4="no"
+            has_error4 = "no"
             #display error message
         if has_error4 == "yes":
             self.service_error_label.configure(text=answer)
@@ -240,17 +262,17 @@ class Track:
         #check minutes spent
         if self.var0.get() == 1:
             try:
-                minutes_spent=int(minutes_spent)
-                if 0<minutes_spent:
-                    has_error5="no"
+                minutes_spent = int(minutes_spent)
+                if 0 < minutes_spent:
+                    has_error5 = "no"
                 else:
-                    has_error5="yes"
-                    answer="Please enter a valid whole number!"
+                    has_error5 = "yes"
+                    answer = "Please enter a valid whole number!"
             except ValueError:
-                has_error5="yes"
-                answer="Please enter a valid whole number!"
+                has_error5 = "yes"
+                answer = "Please enter a valid whole number!"
         else:
-            has_error5="no"
+            has_error5 = "no"
             #display error messages
         if has_error5 == "yes":
             self.mins_spent_entry.configure(bg=error)
@@ -260,55 +282,79 @@ class Track:
             self.minutes_error_label.configure(text="")
 
         #clear entry boxes if there are no errors
-        if has_error1=="no" and has_error2=="no" and has_error3=="no" and has_error4=="no" and has_error5=="no":
+        if has_error1 == "no" and has_error2 == "no" and has_error3 == "no" and has_error4 == "no" and has_error5 == "no":
             self.job_numbers.insert(0, job_number)
             self.names.insert(0, customer_name)
             self.view_button.config(state=NORMAL)
-            self.calc_charges(distance_travelled, minutes_spent, self.var0, self.var1)
+            self.calc_charges(distance_travelled, minutes_spent, self.var0.get(), self.var1.get())
             self.clear_entry()
 
-    def calc_charges(self, distance, minutes, var0, var1):
+    def calc_charges(self, distance, minute, var0, var1):
+        """
+        Calculate the job charge based on the distance travelled and services required (and also minutes spent on virus
+        protection is the service is required).
+
+        Arguments: distance, minute, var0, var1
+        Returns: None
+        """
         #rounding distance
         if distance % 0.5 == 0:
-            distance_travelled=math.ceil(distance)
+            distance_travelled = math.ceil(distance)
         else:
-            distance_travelled=round(distance)
+            distance_travelled = round(distance)
         #calculate charge1
-        if distance_travelled<=5:
-            charge1=10
+        if distance_travelled <= 5:
+            charge1 = 10
         else:
-            charge1=(distance_travelled - 5) * 0.5 + 10
+            charge1 = (distance_travelled - 5) * 0.5 + 10
 
         #calculate charge2 (virus_protection service)
-        if var0==1:
-            charge2=0.8 * minutes
+        if var0 == 1:
+            charge2 = 0.8 * minute
         else:
-            charge2=0
+            charge2 = 0
 
         #claculate charge3 (wof and tune service)
-        if var1==1:
-            charge3=100
+        if var1 == 1:
+            charge3 = 100
         else:
-            charge3=0
+            charge3 = 0
 
         #calculate final job charge
-        job_charge = charge1 + charge2 + charge3
+        job_charge = '{:.2f}'.format(charge1 + charge2 + charge3)
 
         #store job charge
         self.charges.insert(0, job_charge)
 
     def view(self, job_numbers, names, charges):
-        print("You asked for viewing your jobs.")
+        """
+        Open the view dialogue box for the user when the 'Show All Jobs' button is clicked
+
+        Arguments: job_numbers, names, charges
+        Returns: list, list, list
+        """
         get_info = View(self, job_numbers, names, charges)
 
     def help(self):
+        """
+        Open the 'Help' GUI for the user if the 'Help' button is clicked
+
+        Arguments: None
+        Returns: None
+        """
         get_help = Help(self)
 
     def clear_entry(self):
-        self.job_num_entry.delete(first=0,last=END)
-        self.customer_name_entry.delete(first=0,last=END)
-        self.distance_travelled_entry.delete(first=0,last=END)
-        self.mins_spent_entry.delete(first=0,last=END)
+        """
+        Clear all entry boxes and checkboxes if all inputs/selections are valid.
+
+        Arguments: None
+        Returns: None
+        """
+        self.job_num_entry.delete(first=0, last=END)
+        self.customer_name_entry.delete(first=0, last=END)
+        self.distance_travelled_entry.delete(first=0, last=END)
+        self.mins_spent_entry.delete(first=0, last=END)
         self.var0.set(0)
         self.var1.set(0)
         self.check_service()
@@ -316,6 +362,13 @@ class Track:
 
 class Help:
     def __init__(self, partner):
+        """
+        Create a dialogue box for displaying instructions for the user, and a 'Dismiss' button is included
+        for the user to close the dialogue box.
+
+        Arguments: None
+        Return: None
+        """
         background_color = "#a81c07"
 
         #disable help button
@@ -341,19 +394,20 @@ class Help:
         #show user box for displaying details(row 1)
         background_color1 = "#E9967A"
         self.details_frame = Frame(self.help_frame, bg=background_color1,
-                                       borderwidth=2, relief="solid")
+                                   borderwidth=2, relief="solid")
         self.details_frame.grid(row=1, padx=10)
 
         #heading (row 0)
         self.heading_label = Label(self.details_frame, justify=LEFT,
                                    text="Help / Instructions",
                                    bg=background_color1,
-                                   font="Arial 21 italic bold",width=29,
+                                   font="Arial 21 italic bold", width=29,
                                    padx=10, pady=10)
         self.heading_label.grid(row=0, columnspan=2)
 
         #help text (label, row 1)
-        self.help_text = Label(self.details_frame, text="""This program is aimed to help you keep track of your jobs whilst also calculating the job charge/cost.
+        self.help_text = Label(self.details_frame,
+                               text="""This program is aimed to help you keep track of your jobs whilst also calculating the job charge/cost.
 
 You need to enter your:
   1. Job number
@@ -384,18 +438,29 @@ Pressing the ‘Show All Jobs’ button allows you to view through all the jobs 
                                      command=partial(self.close_help, partner))
         self.dismiss_button.grid(row=0)
 
-
-
     def close_help(self, partner):
+        """
+        Close the 'Help' dialogue box
+
+        Arguments: None
+        Returns: None
+        """
         #put help button back to normal
         partner.help_button.config(state=NORMAL)
         self.help_box.destroy()
 
 class View:
     def __init__(self, partner, job_numbers, names, charges):
+        """
+        Create a window for the user to view their entered job information. 'Dismiss' button is there for the user
+        to close the window. 'Previous' and 'Next' buttons enables the user to view through all entered job information.
+
+        Arguments: job_numbers, names, charges
+        Return: str, list, list, list
+        """
         background_color = "#a81c07"
-        text_color="#303030"
-        text_color1="#6f0000"
+        text_color = "#303030"
+        text_color1 = "#6f0000"
 
         #disable view button
         partner.view_button.config(state=DISABLED)
@@ -419,7 +484,7 @@ class View:
 
         #Show headings & provide an area which will show contents later...(row 1)
         #show user box for displaying details(row 1)
-        background_color1= "#E9967A"
+        background_color1 = "#E9967A"
         self.details_frame = Frame(self.view_frame, bg=background_color1,
                                    borderwidth=2,relief="solid")
         self.details_frame.grid(row=1, padx=10,ipady=10)
@@ -441,9 +506,9 @@ class View:
                                       font="Arial 18", bg=background_color1, fg=text_color,
                                       justify=LEFT)
         self.job_number_label.grid(row=1, column=0, sticky='e')
-        self.job_number_value_label = Label(self.details_frame, text=job_numbers[ self.current_index],
+        self.job_number_value_label = Label(self.details_frame, text=job_numbers[self.current_index],
                                             font="Arial 18", bg=background_color1, fg=text_color1,
-                                             justify=LEFT)
+                                            justify=LEFT)
         self.job_number_value_label.grid(row=1, column=1, sticky='w', padx=20)
 
         #display customer name (row 2)
@@ -451,19 +516,19 @@ class View:
                                 font="Arial 18", bg=background_color1, fg=text_color,
                                 justify=LEFT)
         self.name_label.grid(row=2, column=0, sticky='e')
-        self.name_value_label = Label(self.details_frame, text=names[ self.current_index],
+        self.name_value_label = Label(self.details_frame, text=names[self.current_index],
                                       font="Arial 18", bg=background_color1, fg=text_color1,
                                       justify=LEFT, wrap=150)
         self.name_value_label.grid(row=2, column=1, sticky='w', padx=20)
 
         #display job charges (row 3)
-        self.charge_label = Label(self.details_frame, text="Job Charge:",
+        self.charge_label = Label(self.details_frame, text="Job Charge ($):",
                                   font="Arial 18", bg=background_color1, fg=text_color,
-                                   justify=LEFT)
+                                  justify=LEFT)
         self.charge_label.grid(row=3, column=0, sticky='e')
         self.charge_value_label = Label(self.details_frame, text=charges[self.current_index],
                                         font="Arial 18", bg=background_color1, fg=text_color1,
-                                         justify=LEFT)
+                                        justify=LEFT)
         self.charge_value_label.grid(row=3, column=1, sticky='w', padx=20)
 
         #Dimiss Button (row 2)
@@ -474,7 +539,7 @@ class View:
                                      font="Verdana 22 bold", width=10,
                                      highlightbackground="#A52A2A",
                                      padx=10, pady=10, fg="white",
-                                     command=partial(self.close_view,partner))
+                                     command=partial(self.close_view, partner))
         self.dismiss_button.grid(row=0)
 
         #Previous/Next buttons (row=3)
@@ -484,16 +549,21 @@ class View:
         self.prev_button = Button(self.prev_next_frame, font="Verdana 15 bold",
                                   text="Previous", width=15, height=2,
                                   highlightbackground="#EC5800", fg="#A52A2A",
-                                  command=lambda: self.show_prev_next('prev',job_numbers, names, charges))
+                                  command=lambda: self.show_prev_next('prev', job_numbers, names, charges))
         self.prev_button.grid(row=0, column=0)
 
         self.next_button = Button(self.prev_next_frame, font="Verdana 15 bold",
                                   text="Next", width=15, height=2,
                                   highlightbackground="#EC5800", fg="#A52A2A",
-                                  command=lambda: self.show_prev_next('next',job_numbers, names, charges))
+                                  command=lambda: self.show_prev_next('next', job_numbers, names, charges))
         self.next_button.grid(row=0, column=1)
 
     def show_prev_next(self, seq, job_numbers, names, charges):
+        """
+        Show the user other job information when 'Previous' or 'Next button is pushed.
+        Arguments: seq, job_numbers, names, charges
+        Returns: None
+        """
         if seq == "prev":
             self.current_index -= 1
 
@@ -517,8 +587,13 @@ class View:
             self.name_value_label.configure(text=names[self.current_index])
             self.charge_value_label.configure(text=charges[self.current_index])
 
-
     def close_view(self, partner):
+        """
+        Close the view dialogue box
+
+        Arguments: None
+        Returns: None
+        """
         #put view button back to normal
         partner.view_button.config(state=NORMAL)
         self.view_box.destroy()
